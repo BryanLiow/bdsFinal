@@ -1,8 +1,8 @@
 use bigdata_final_zeyan_liow
 
-//mongoimport --db bigdata_final_zeyan_liow --collection hourly_dublin_17_18 --type csv --headerline --file C:\Users\User\Desktop\bd_final\hourly_dublin_17_18.csv
-//mongoimport --db bigdata_final_zeyan_liow --collection JLHome1718Temp --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),temp.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Temperature.csv
-//mongoimport --db bigdata_final_zeyan_liow --collection JLHome1718Power --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),power.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Power.csv
+//mongoimport --port 27601 --db bigdata_final_zeyan_liow --collection hourly_dublin_17_18 --type csv --headerline --file C:\Users\User\Desktop\bd_final\hourly_dublin_17_18.csv
+//mongoimport --port 27601 --db bigdata_final_zeyan_liow --collection JLHome1718Temp --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),temp.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Temperature.csv
+//mongoimport --port 27601 --db bigdata_final_zeyan_liow --collection JLHome1718Power --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),power.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Power.csv
 
 db.JLHome1718Power.createIndex({date:1})
 db.JLHome1718Temp.createIndex({date:1})
@@ -26,6 +26,9 @@ db.JLHome1718Power.aggregate([
 		$out : "JLHome1718AvgPower" 
 	}	
 ])
+
+db.JLHome1718AvgPower.find().forEach(function(el){el._id = new ISODate(el._id);db.JLHome1718AvgPower.save(el)});
+
 db.JLHome1718Temp.aggregate([
 	{
 		$group: 
@@ -44,42 +47,26 @@ db.JLHome1718Temp.aggregate([
 
 db.JLHome1718AvgPower.find({_id: {$gte: "2018-01-01 00:00:00",$lt: "2019-01-01 00:00:00",}}).sort({_id: 1}).forEach(function(e) {db.HomePower.insert(e);})
 db.JLHome1718AvgTemp.find({_id: {$gte: "2018-01-01 00:00:00",$lt: "2019-01-01 00:00:00",}}).sort({_id: 1}).forEach(function(e) {db.HomeTemp.insert(e);})
-db.hourly_dublin_17_18.find({_id: {$gte: new ISODate("2018-01-01 00:00:00"),$lt: new ISODate("2019-01-01 00:00:00"),}}).sort({date: 1}).forEach(function(e) {db.Dublin.insert(e);})
+db.hourly_dublin_17_18.find({date: {$gte: new ISODate("2018-01-01 00:00:00"),$lt: new ISODate("2019-01-01 00:00:00"),}}).sort({date: 1}).forEach(function(e) {db.Dublin.insert(e);})
 
-db.hourly_dublin_17_18.find({date: {$gte: new Date("2018-01-01T00:00:00Z"),$lte: new Date("2018-12-31T23:00:00Z")}}).sort({date: 1})
-
-db.hourly_dublin_17_18.find({date: {$gte: ISODate("2017-12-11T00:00:00Z"),$lt: ISODate("2019-01-01T00:00:00Z")}}).sort({date: -1})
-db.hourly_dublin_17_18.find({date: {$gte: ISODate("2018-12-13T00:00:00Z")}}).sort({_id: -1})
+//db.HomeTemp.find().forEach(function(data) {data.update({"_id" : data._id},{$set : {"power":(db.inventory.find( { _id : data._id }, { _id : 1} ))}});db.test.save(data)})
 
 
 
-db.HomeTemp.find().forEach(function(data) {data.update({"_id" : data._id},{$set : {"power":(db.inventory.find( { _id : data._id }, { _id : 1} ))}});db.test.save(data)})
-
-
-
-db.HomePower.aggregate([
-{
-   $lookup:
-     {
-       from: "HomeTemp",
-       localField: "_id",
-       foreignField: "_id",
-       as: "Home"
-     }
-},
-	{ 
-		$out : "test" 
-	}	
-])
-
-db.sales.aggregate( [
-   { $match: { date: { $gte: new Date("2019-05-01"), $lt: new Date("2019-06-01") } } },
-   { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }, totalqty: { $sum: "$quantity" } } },
-   { $project: { _id: 0, salesDate: { $toDate: "$_id" }, totalqty: 1 } },
-   { $merge : { into : "newDailySales201905", on: "salesDate" } }
-] )
-
-//mongoexport --db bigdata_final_zeyan_liow --collection hourly_dublin_17_18 --type=csv --fields _id,date,irain,rain,itemp,temp,iwb,wetb,dewpt,vappr,rhum,msl,iwdsp,wdsp,iwddir,wwddir,ww,w,sun,vis,clht,clamt --out C:\Users\User\Desktop\bd_final\test1.csv
+//db.HomePower.aggregate([
+//{
+//   $lookup:
+//     {
+//       from: "HomeTemp",//
+//       localField: "_id",
+//       foreignField: "_id",
+//       as: "Home"
+//     }
+//},
+//	{ 
+//		$out : "test" 
+//	}	
+//])
 
 
 
@@ -91,14 +78,10 @@ db.sales.aggregate( [
 
 
 
-
-
-
-
-
-
-
-
+#install.packages("corrplot")
+>library(corrplot)
+>data_cor <- cor(rock)
+>corrplot(corr = data_cor, method = 'color', addCoef.col="grey") 
 
 
 
