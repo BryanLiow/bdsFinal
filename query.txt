@@ -1,8 +1,8 @@
 use bigdata_final_zeyan_liow
 
-//mongoimport --port 27601 --db bigdata_final_zeyan_liow --collection hourly_dublin_17_18 --type csv --headerline --file C:\Users\User\Desktop\bd_final\hourly_dublin_17_18.csv
-//mongoimport --port 27601 --db bigdata_final_zeyan_liow --collection JLHome1718Temp --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),temp.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Temperature.csv
-//mongoimport --port 27601 --db bigdata_final_zeyan_liow --collection JLHome1718Power --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),power.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Power.csv
+//mongoimport --db bigdata_final_zeyan_liow --collection hourly_dublin_17_18 --type csv --headerline --file C:\Users\User\Desktop\bd_final\hourly_dublin_17_18.csv
+//mongoimport --db bigdata_final_zeyan_liow --collection JLHome1718Temp --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),temp.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Temperature.csv
+//mongoimport --db bigdata_final_zeyan_liow --collection JLHome1718Power --type csv --columnsHaveTypes --fields "date.date(2006-01-02 15:04:05),power.string()" --file C:\Users\User\Desktop\bd_final\JLHome1718Power.csv
 
 db.JLHome1718Power.createIndex({date:1})
 db.JLHome1718Temp.createIndex({date:1})
@@ -42,50 +42,55 @@ db.JLHome1718Temp.aggregate([
 	}	
 ])
 
-//db.JLHome1718AvgPower.find().forEach(function(el){el._id = new Date(el._id);db.JLHome1718AvgPower.save(el)});
-//db.JLHome1718AvgTemp.find().forEach(function(el){el._id = new Date(el._id);db.JLHome1718AvgTemp.save(el)});
-
 db.JLHome1718AvgPower.find({_id: {$gte: "2018-01-01 00:00:00",$lt: "2019-01-01 00:00:00",}}).sort({_id: 1}).forEach(function(e) {db.HomePower.insert(e);})
 db.JLHome1718AvgTemp.find({_id: {$gte: "2018-01-01 00:00:00",$lt: "2019-01-01 00:00:00",}}).sort({_id: 1}).forEach(function(e) {db.HomeTemp.insert(e);})
 db.hourly_dublin_17_18.find({date: {$gte: new ISODate("2018-01-01 00:00:00"),$lt: new ISODate("2019-01-01 00:00:00"),}}).sort({date: 1}).forEach(function(e) {db.Dublin.insert(e);})
 
-//db.HomeTemp.find().forEach(function(data) {data.update({"_id" : data._id},{$set : {"power":(db.inventory.find( { _id : data._id }, { _id : 1} ))}});db.test.save(data)})
+//////////////////////////////////////////////////////////////////////Replica set
+mongod --replSet csReplicaSet --dbpath C:\Users\User\Desktop\bd_final\replicaSets\mongo1 --bind_ip localhost --port 27601
 
+mongo localhost:27601
 
+rs.initiate(
+   {
+      _id: "csReplicaSet",
+      members: [
+         { _id: 0, host : "localhost:27601" },
+         { _id: 1, host : "localhost:27602" },
+         { _id: 2, host : "localhost:27603" }
+      ]
+   }
+)
 
-//db.HomePower.aggregate([
-//{
-//   $lookup:
-//     {
-//       from: "HomeTemp",//
-//       localField: "_id",
-//       foreignField: "_id",
-//       as: "Home"
-//     }
-//},
-//	{ 
-//		$out : "test" 
-//	}	
-//])
+mongod --replSet csReplicaSet --dbpath C:\Users\User\Desktop\bd_final\replicaSets\mongo2 --bind_ip localhost --port 27602
 
+mongo localhost:27602 
 
+rs.initiate(
+   {
+      _id: "csReplicaSet",
+      members: [
+         { _id: 0, host : "localhost:27601" },
+         { _id: 1, host : "localhost:27602" },
+         { _id: 2, host : "localhost:27603" }
+      ]
+   }
+)
 
+mongod --replSet csReplicaSet --dbpath C:\Users\User\Desktop\bd_final\replicaSets\mongo3 --bind_ip localhost --port 27603
 
+mongo localhost:27603
 
-
-
-
-
-
-
-#install.packages("corrplot")
->library(corrplot)
->data_cor <- cor(rock)
->corrplot(corr = data_cor, method = 'color', addCoef.col="grey") 
-
-
-
-
+rs.initiate(
+   {
+      _id: "csReplicaSet",
+      members: [
+         { _id: 0, host : "localhost:27601" },
+         { _id: 1, host : "localhost:27602" },
+         { _id: 2, host : "localhost:27603" }
+      ]
+   }
+)
 
 
 

@@ -46,29 +46,29 @@ length(which(is.na(data)==TRUE))
 #data <- na.omit(data)
 summary(data)
 
-boxplot(data$hmTemp,main="Home Temperature")
-boxplot(data$hmPow,main="Home Power")
-boxplot(data$rain,main="Precipitation Amount")
-boxplot(data$temp,main="Air Temperature")
-boxplot(data$wetb,main="Wet Bulb Air Temperature")
-boxplot(data$dewpt,main="Dew Point Air Temperature")
-boxplot(data$vappr,main="Vapour Pressure	")
-boxplot(data$rhum,main="Relative Humidity")
-boxplot(data$msl,main="Mean Sea Level Pressure	")
-boxplot(data$wdsp,main="Mean Hourly Wind Speed	")
-boxplot(data$wddir,main="Predominant Hourly wind Direction")
-boxplot(data$vis,main="Visibility")
-boxplot(data$clht,main="Cloud Ceiling Height")
-boxplot(data$clamt,main="Cloud Amount")
+boxplot(data$hmTemp,ylab="Home Temperature(°C)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$hmPow,ylab="Home Power(kWh)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$rain,ylab="Precipitation Amount(mm)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$temp,ylab="Air Temperature(°C)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$wetb,ylab="Wet Bulb Air Temperature(°C)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$dewpt,ylab="Dew Point Air Temperature(°C)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$vappr,ylab="Vapour Pressurehpa(hpa)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$rhum,ylab="Relative Humidity(%)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$msl,ylab="Mean Sea Level Pressure(hPa)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$wdsp,ylab="Mean Hourly Wind Speed(kt)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$wddir,ylab="Predominant Hourly wind Direction(kt)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$vis,ylab="Visibility(m)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$clht,ylab="Cloud Ceiling Height(100s feet)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
+boxplot(data$clamt,ylab="Cloud Amount(okta)",cex.lab=1.5, cex.axis=1.5,cex=1.5)
 
-hist(data$i)
-hist(data$itemp)
-hist(data$iwb)
-hist(data$iwdsp,xlim=c(0,7))
-hist(data$iwddir)
-hist(data$ww)
-hist(data$w)
-hist(data$sun)
+hist(data$irain,xlab="Index",cex.lab=1.8, cex.axis=1.8,cex=1.8,cex.main=1.8,main = "Histogram Data of Rain Indecator")
+hist(data$itemp,xlab="Index",cex.lab=1.8, cex.axis=1.8,cex=1.8,cex.main=1.8,main = "Histogram Data of Temperatur Indecator")
+hist(data$iwb,xlab="Index",cex.lab=1.8, cex.axis=1.8,cex=1.8,cex.main=1.8,main = "Histogram Data of Wet Bulb Air Temperature Indecator")
+hist(data$iwdsp,xlab="Index",xlim=c(0,7),cex.lab=1.8, cex.axis=1.8,cex.main=1.8,cex=1.8,main = "Histogram Data of Mean Hourly Wind Speed Indecator")
+hist(data$iwddir,xlab="Index",cex.lab=1.8, cex.axis=1.8,cex=1.8,cex.main=1.8,main = "Histogram Data of Predominant Hourly Wind Direction Indecator")
+hist(data$ww,xlab="Index",cex.lab=1.8, cex.axis=1.8,cex=1.8,cex.main=1.8,main = "Histogram Data of Synop Code Present Weather")
+hist(data$w,xlab="Index",cex.lab=1.8, cex.axis=1.8,cex=1.8,cex.main=1.8,main = "Histogram Data of Synop Code Past Weather")
+hist(data$sun,cex.lab=1.8, cex.axis=1.8,cex=1.8,cex.main=1.8,xlab="Hour",main = "Histogram Data of Sunshine Duration")
 
 data$Colour[(format(as.Date(data$date), "%m"))=="01"]="#a83232"
 data$Colour[(format(as.Date(data$date), "%m"))=="02"]="#a88332"
@@ -85,51 +85,49 @@ data$Colour[(format(as.Date(data$date), "%m"))=="12"]="#000000"
 
 #set.seed(1)
 pairs(~hmPow+hmTemp+temp+
-        wetb+dewpt+vappr+rhum+msl+wdsp+wddir+month+day+hour
+        wetb+dewpt+vappr+rhum+msl+wdsp+wddir+vis+clht+clamt+day+hour
       ,data = data, panel = panel.smooth, col=data$Colour, pch = "*")
 #par(xpd = TRUE)
 #legend(2.8,-1,title="Month", fill = data$Colour, legend = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
 
-boxplot(data$hmTemp~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$hmPow~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$temp~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$wetb~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$dewpt~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$vappr~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$rhum~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$msl~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$wdsp~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$wddir~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$vis~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$clht~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-boxplot(data$clamt~data$month,names=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-
+n <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+boxplot(data$hmTemp~data$month,ylab="Home Temperature(°C)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$hmPow~data$month,ylab="Home Power(kWh)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$rain~data$month,ylab="Precipitation Amount(mm)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$temp~data$month,ylab="Air Temperature(°C)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$wetb~data$month,ylab="Wet Bulb Air Temperature°C",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$dewpt~data$month,ylab="Dew Point Air Temperature(°C)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$vappr~data$month,ylab="Vapour Pressurehpa(hpa)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$rhum~data$month,ylab="Relative Humidity(%)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$msl~data$month,ylab="Mean Sea Level Pressure(hPa)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$wdsp~data$month,ylab="Mean Hourly Wind Speed(kt)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$wddir~data$month,ylab="Predominant Hourly wind Direction(kt)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$vis~data$month,ylab="Visibility(m)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$clht~data$month,ylab="Cloud Ceiling Height(100s feet)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
+boxplot(data$clamt~data$month,ylab="Cloud Amount(okta)",xlab="Month",cex.lab=1.5, cex.axis=1.5,cex=1.5,names=n)
 
 
 #2#########################################################################2
-data_sd <- data
-data_sd[,c("hmTemp","hmPow","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir")]<-scale(data[,c("hmTemp","hmPow","","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir")])
-data_sd[,c("hmTemp","hmPow","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir")]<- na.omit(data_sd[,c("hmTemp","hmPow","","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir")])
+data_sd <- data[,c("rain","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir","vis","clht")]
+data_sd<-scale(data[,c("rain","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir","vis","clht")])
+data_sd<- na.omit(data_sd)
 
-data_sd <- round(data_sd,2)
-sapply(data_sd, sd)
+round(apply(as.matrix(data_sd,8760,27),2,mean),2)
+apply(as.matrix(data_sd,48,4),2,sd)
 
 wss <- (nrow(data_sd)-1)*sum(apply(data_sd,2,var))
-for(i in 2:15){wss[i]<- sum(kmeans(data_sd,centers=i,nstart = 3)$withinss)}  
+for(i in 2:15){wss[i]<- sum(kmeans(data_sd,centers=i,nstart = 5,iter.max = 30)$withinss)}  
 
 plot(1:15, wss, type="b", xlab="Number of Clusters",ylab="Within groups sum of squares")
 
-km <- kmeans(data_sd, 2, nstart = 3)
-pairs(data[,c("hmTemp","hmPow","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir","day","hour")], col=km$cluster,pch=17)
+km <- kmeans(data_sd, 2, nstart = 5)
+pairs(data[,c("rain","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir","vis","clht")], col=km$cluster,pch=17)
 
 print(km)
 
 #3################################################################3
 
-my_data <-scale(data[,c("hmTemp","hmPow","temp","wetb","dewpt","vappr","rhum","msl","wdsp","wddir")])
-my_data<- na.omit(my_data)
-pca<-prcomp(my_data)
+pca<-prcomp(data_sd)
 plot(pca,type="l")
 summary(pca)
 print(pca)
@@ -145,7 +143,7 @@ pairs(~hmPow+hmTemp++temp+
         wetb+dewpt+vappr+rhum+msl+wdsp+wddir+month+day+hour
       ,data = data, panel = panel.smooth, col=data$Colour, pch = "*")
 
-data_cor <- data[,c("hmPow","hmTemp","temp","wetb","dewpt","vappr","msl","vis","clht","clamt","month","day","hour")]
+data_cor <- data[,c("hmPow","hmTemp","temp","wetb","dewpt","vappr","rhum","msl","vis","clht","clamt","month","day","hour")]
 data_cor<- na.omit(data_cor)
 corrplot(corr = corrgram(data_cor), method = 'color', addCoef.col="grey") 
 
@@ -169,9 +167,9 @@ summary(data$hmPow)
 #Because the Mean is much larger than the Median
 #the histogram is right-skewed
 hist(data$hmPow)
-#In our data, the electricity consumption of most houses is 0-600 in 2018
+#In my data, the electricity consumption of most houses is 0-600 in 2018
 
-data_cor2 <- data[,c("hmPow","hmTemp","temp","wetb","dewpt","vappr","msl","vis","clht","clamt","month")]
+data_cor2 <- data[,c("hmPow","hmTemp","rain","temp","wetb","dewpt","vappr","rhum","msl","vis","clht","clamt","month")]
 data_cor2<- na.omit(data_cor2)
 corrplot(corr = corrgram(data_cor2), method = 'color', addCoef.col="grey") 
 
@@ -197,14 +195,14 @@ data$Winter[(format(as.Date(data$date), "%m"))=="11"]<-0
 
 data$Winter <- as.numeric(data$Winter)
 
-data_cor2 <- data[,c("hmPow","hmTemp","temp","wetb","dewpt","vappr","msl","vis","clht","clamt","Winter")]
+data_cor2 <- data[,c("hmPow","hmTemp","rain","temp","vappr","vis","Winter")]
 data_cor2<- na.omit(data_cor2)
 corrplot(corr = corrgram(data_cor2), method = 'color', addCoef.col="grey") 
 
 #H0:B(hmTemp) = B(wetb) = B(vappr) = B(vis) = B(Winter) = 0
 #H1:At least 1 coefficient != 0
 #p-value for temp,dewpt,msl,clht,clamt,month is greater than 0.05 fail to reject H0
-fit2 <- lm(hmPow~hmTemp+wetb+vappr+vis+Winter,data=data_cor2)
+fit2 <- lm(hmPow~hmTemp+rain+temp+vappr+vis+Winter,data=data_cor2)
 summary(fit2)
 
 BIC(fit1,fit2)
